@@ -17,7 +17,7 @@ class Numeri {
     const findInDictionary = this.findIntegerInDictionary(this.integer);
     if (findInDictionary) return findInDictionary;
 
-    this.symbolModulos();
+    this.buildOutput();
     return this.roman;
   }
 
@@ -26,11 +26,9 @@ class Numeri {
     return pair?.roman || false;
   }
 
-  symbolModulos() {
+  buildOutput() {
     symbolsDictionary.forEach(pair => {
-      const numberOfMultiples =
-        (this.integerRemains - (this.integerRemains % pair.integer)) /
-        pair.integer;
+      const numberOfMultiples = this.symbolOccurences(pair);
 
       this.integerRemains =
         this.integerRemains - numberOfMultiples * pair.integer;
@@ -38,7 +36,14 @@ class Numeri {
     });
   }
 
-  appendToOutput(string: string) {
+  symbolOccurences(pair: ISymbolPair) {
+    return (
+      (this.integerRemains - (this.integerRemains % pair.integer)) /
+      pair.integer
+    );
+  }
+
+  appendToOutput(string: string): void {
     this.roman = this.roman.concat(string);
   }
 }
@@ -48,7 +53,12 @@ export const toRoman = (integer: number) => {
   return numeri.convertToRoman();
 };
 
-const symbolsDictionary: Array<{ integer: number; roman: string }> = [
+interface ISymbolPair {
+  integer: number;
+  roman: string;
+}
+
+const symbolsDictionary: Array<ISymbolPair> = [
   { integer: 1000, roman: 'M' },
   { integer: 500, roman: 'D' },
   { integer: 100, roman: 'C' },
